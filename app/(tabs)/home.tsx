@@ -13,22 +13,25 @@ import useAppwrite from '../../lib/useAppwrite'
 import VideoCard from '@/components/VideoCard/VideoCard'
 
 const Home = () => {
-    const { user, setUser, setIsLoggedIn } = useGlobalContext()
+    const { user } = useGlobalContext()
     const [refreshing, setRefreshing] = useState(false)
     const { data: posts, refetch } = useAppwrite(getAllPosts)
-    const { data: latestPosts } = useAppwrite(getLatestPosts)
+    const { data: latestPosts, refetchLatestPosts } = useAppwrite(getLatestPosts)
 
     const onRefresh = async () => {
         setRefreshing(true)
         await refetch()
+        await refetchLatestPosts()
         setRefreshing(false);
     }
 
+
+    console.log("POST 0:", posts[0])
     return (
         <SafeAreaView className='w-full h-full bg-primary'>
             <FlatList
                 data={posts}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.$id}
                 renderItem={({ item }) => (<VideoCard video={item} />)}
                 ListHeaderComponent={() => (
                     <View className='my-6 px-4 space-y-6'>
@@ -69,7 +72,6 @@ const Home = () => {
                 }
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             />
-
         </SafeAreaView>
     )
 }

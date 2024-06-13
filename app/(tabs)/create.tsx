@@ -16,7 +16,6 @@ const Create = () => {
         title: '',
         video: null,
         thumbnail: null,
-        prompt: ''
     })
 
     const openPicker = async (selectType: string, source: string) => {
@@ -50,7 +49,7 @@ const Create = () => {
 
     const submit = async () => {
 
-        if (!form.title || !form.prompt || !form.thumbnail || !form.video) {
+        if (!form.title || !form.thumbnail || !form.video) {
             Alert.alert('Please fill in all the fields')
         }
 
@@ -64,12 +63,11 @@ const Create = () => {
             Alert.alert('error', error.message)
 
         } finally {
-            // setForm({
-            //     title: '',
-            //     video: null,
-            //     thumbnail: null,
-            //     prompt: ''
-            // })
+            setForm({
+                title: '',
+                video: null,
+                thumbnail: null,
+            })
             setUploading(false)
         }
 
@@ -85,55 +83,67 @@ const Create = () => {
                     handleChangeValue={(e: string) => setForm({ ...form, title: e })}
                     placeholder='Add title'
                 />
-                <View className='mt-7 space-y-2'>
+                <View className='mt-7 space-y-2 justify-center items-center'>
                     <Text className='text-base text-gray-100 font-pmedium'>Upload Video</Text>
-                    <TouchableOpacity onPress={() => openPicker('video', 'camera')}>
-                        {form.video
-                            ? (<Video
-                                source={{ uri: form.video.uri }}
-                                className='w-full h-64 rounded-2xl'
-                                useNativeControls
-                                resizeMode={ResizeMode.COVER}
-                                isLooping
-                            />)
-                            : (<View
-                                className='w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center' >
-                                <View className='w-14 h-14 border border-dashed border-secondary-100 justify-center items-center'>
-                                    <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
+
+                    {form.video
+                        ? (<Video
+                            source={{ uri: form.video.uri }}
+                            className='w-full h-64 rounded-2xl'
+                            useNativeControls
+                            resizeMode={ResizeMode.COVER}
+                            isLooping
+                        />)
+                        : (<View className='flex-row w-full justify-center items-center gap-2 p-2'>
+                            <TouchableOpacity className='w-1/2' onPress={() => openPicker('video', 'library')}>
+                                <View className='w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center' >
+                                    <View className='w-14 h-14 border border-dashed border-secondary-100 justify-center items-center'>
+                                        <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
+
+                                    </View>
+                                    <Text className='text-white p-2 font-psemibold'>Gallery</Text>
                                 </View>
-                            </View>)}
-                    </TouchableOpacity>
+                            </TouchableOpacity>
+                            <TouchableOpacity className='w-1/2' onPress={() => openPicker('video', 'camera')}>
+                                <View className='w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center' >
+                                    <View className='w-14 h-14 border border-dashed border-secondary-100 justify-center items-center'>
+                                        <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
+
+                                    </View>
+                                    <Text className='text-white p-2 font-psemibold'>Camera</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        )}
+
                 </View>
                 <View className='mt-7 space-y-2'>
                     <Text className='text-white text-xl font-psemibold'>Thumbnail Image</Text>
-                    <View className='flex-row'>
-                        <TouchableOpacity className='w-1/2' onPress={() => openPicker('image', 'library')}>
-                            {form.thumbnail
-                                ? (<Image source={{ uri: form.thumbnail.uri }} resizeMode='cover' className='w-full h-64 rounded-2xl' />)
-                                : (<View
-                                    className='w-full h-16 px-4 bg-black-100 rounded-2xl justify-center items-center' >
-                                    <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
-                                    <Text className='text-white'>Gallery</Text>
-                                </View>)}
-                        </TouchableOpacity>
-                        <TouchableOpacity className='w-1/2' onPress={() => openPicker('image', 'camera')}>
-                            {form.thumbnail
-                                ? (<Image source={{ uri: form.thumbnail.uri }} resizeMode='cover' className='w-full h-64 rounded-2xl' />)
-                                : (<View
-                                    className='w-full h-16 px-4 bg-black-100 rounded-2xl justify-center items-center' >
-                                    <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
-                                    <Text className='text-white'>Camera</Text>
-                                </View>)}
-                        </TouchableOpacity>
+                    <View className='flex-row w-full justify-center items-center gap-2 p-2'>
+                        {form.thumbnail
+                            ? (<>
+                                <Image source={{ uri: form.thumbnail.uri }} resizeMode='cover' className='w-full h-64 rounded-2xl' />
+                            </>)
+                            : (
+                                <>
+                                    <TouchableOpacity className='w-1/2' onPress={() => openPicker('image', 'library')}>
+                                        <View
+                                            className='w-full h-16 px-4 bg-black-100 rounded-2xl justify-center items-center' >
+                                            <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
+                                            <Text className='text-white font-psemibold'>Gallery</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity className='w-1/2' onPress={() => openPicker('image', 'camera')}>
+                                        <View
+                                            className='w-full h-16 px-4 bg-black-100 rounded-2xl justify-center items-center' >
+                                            <Image source={icons.upload} resizeMode='contain' className='w-1/2 h-1/2' />
+                                            <Text className='text-white font-psemibold'>Camera</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </>
+                            )}
                     </View>
                 </View>
-                <FormField
-                    title={'AI prompt'}
-                    value={form.prompt}
-                    extraStyle='mt-10'
-                    handleChangeValue={(e: string) => setForm({ ...form, prompt: e })}
-                    placeholder='The prompt you use to create video'
-                />
                 <CustomButton
                     title='Submit & Publish'
                     handlePress={submit}

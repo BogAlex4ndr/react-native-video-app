@@ -2,10 +2,18 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { icons } from '@/constants'
 import { ResizeMode, Video } from 'expo-av'
+import { deleteVideo } from '@/lib/appwrite'
 
-const VideoCard = ({ video: { video, tumbnail, title, creator: { username, avatar } } }) => {
+const VideoCard = ({ video: { $id, video, tumbnail, title, thumbnail_id, video_id, creator: { username, avatar } } }) => {
 
+    console.log($id)
     const [play, setPlay] = useState(false)
+    const [showPopUp, setShowPopUp] = useState(false)
+
+    console.log("THUMBNAIL ID",thumbnail_id)
+
+    console.log("Video ID",video_id)
+
     return (
         <View className='flex-col items-center px-4 mb-14'>
             <View className='flex-row gap-3 items-satart'>
@@ -27,8 +35,17 @@ const VideoCard = ({ video: { video, tumbnail, title, creator: { username, avata
                     </View>
                 </View>
                 <View className='pt-2'>
-                    <Image source={icons.menu} className='w-5 h-5' resizeMode='contain' />
+                    <TouchableOpacity className='border border-red-600' onPress={() => setShowPopUp(!showPopUp)}>
+                        <Image source={icons.menu} className='w-4 h-6 border border-red-500' resizeMode='contain' />
+                        </TouchableOpacity>
                 </View>
+               {showPopUp && 
+               <View className='absolute right-6 top-2 p-4 border border-red-500 bg-black-100'>
+                    <TouchableOpacity onPress={() => deleteVideo($id,thumbnail_id,video_id)}>
+                        <Text className='text-white'>Delete Video</Text>
+                    </TouchableOpacity>
+                </View>}
+               
             </View>
 
             {play ? (
