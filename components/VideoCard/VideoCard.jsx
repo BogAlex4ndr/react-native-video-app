@@ -35,12 +35,12 @@ const VideoCard = ({ video: { $id, video, tumbnail, title, thumbnail_id, video_i
                     </View>
                 </View>
                 <View className='pt-2'>
-                    <TouchableOpacity className='border border-red-600' onPress={() => setShowPopUp(!showPopUp)}>
+                    <TouchableOpacity onPress={() => setShowPopUp(!showPopUp)}>
                         <Image source={icons.menu} className='w-4 h-6 border border-red-500' resizeMode='contain' />
                         </TouchableOpacity>
                 </View>
                {showPopUp && 
-               <View className='absolute right-6 top-2 p-4 border border-red-500 bg-black-100'>
+               <View className='absolute right-6 top-2 p-4 bg-black-100'>
                     <TouchableOpacity onPress={() => deleteVideo($id,thumbnail_id,video_id)}>
                         <Text className='text-white'>Delete Video</Text>
                     </TouchableOpacity>
